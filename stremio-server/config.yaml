@@ -1,0 +1,26 @@
+name: Stremio Server
+version: "1.0.0"
+slug: stremio-server
+description: >
+  Runs the official stremio-server Node.js application — the same component
+  Stremio's desktop app uses internally — so the hacs-stremio HACS integration
+  can stream Torrentio content (and other torrent-source addons) to Chromecast,
+  smart TVs, and other Home Assistant media_player entities.
+arch:
+  - aarch64
+  - amd64
+  - armv7
+url: https://github.com/Kirill23/stremio-link-conversion
+init: false
+ports:
+  "11470/tcp": 11470
+ports_description:
+  "11470/tcp": Stremio server HTTP API (used by hacs-stremio)
+map:
+  - share:rw
+options:
+  cache_size_gb: 4
+  log_level: info
+schema:
+  cache_size_gb: int(1,200)
+  log_level: list(debug|info|warn|error)
