@@ -15,5 +15,6 @@ export APP_PATH=/share/stremio-server-cache
 export NO_CORS=1
 export CACHE_SIZE_BYTES=$((CACHE_SIZE_GB * 1024 * 1024 * 1024))
 
-# Hand off PID 1 to stremio-server (tini handles signal forwarding)
-exec stremio-server
+# Stremio's server is a single Node.js bundle pulled in at build time
+# from the upstream stremio/server Docker image (see Dockerfile).
+exec node /opt/stremio-server/server.js
