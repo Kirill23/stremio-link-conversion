@@ -1,5 +1,5 @@
 name: Stremio Server
-version: "1.0.0"
+version: "1.0.1"
 slug: stremio-server
 description: >
   Runs the official stremio-server Node.js application — the same component
