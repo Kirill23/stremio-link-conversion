@@ -22,9 +22,13 @@ FROM stremio/server:latest AS upstream
 
 FROM ${BUILD_FROM}
 
-# Node.js is needed at runtime; tini reaps zombie processes from the
-# Node.js subprocess if it crashes mid-stream.
-RUN apk add --no-cache nodejs tini
+# Runtime deps:
+#  - nodejs runs the Stremio server bundle
+#  - tini reaps zombie processes from the Node.js subprocess
+#  - bash + jq are used by run.sh to read add-on options from
+#    /data/options.json (we don't use bashio because it requires
+#    s6-overlay init, which is off here)
+RUN apk add --no-cache nodejs tini bash jq
 
 # Copy the Stremio server bundle from the upstream image. As of
 # stremio/server:latest (2026-05-19), the bundle lives at

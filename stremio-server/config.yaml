@@ -1,5 +1,5 @@
 name: Stremio Server
-version: "1.0.3"
+version: "1.0.4"
 slug: stremio-server
 # Pre-built multi-arch images published by .github/workflows/build.yml
 # on push to master (and on tag pushes). Supervisor pulls the image

@@ -1,14 +1,21 @@
-#!/usr/bin/with-contenv bashio
+#!/bin/bash
+# Plain bash entrypoint. Avoids `with-contenv bashio` (which requires
+# s6-overlay's /run/s6/container_environment to exist). Supervisor
+# launches us with `init: false`, so s6 isn't initialized — bashio
+# would fail on startup with:
+#   s6-envdir: fatal: unable to envdir /run/s6/container_environment
+# Read add-on options directly from /data/options.json via jq.
+set -euo pipefail
 
-# Read options from the add-on's UI
-CACHE_SIZE_GB=$(bashio::config 'cache_size_gb')
-LOG_LEVEL=$(bashio::config 'log_level')
+OPTIONS_PATH=/data/options.json
+CACHE_SIZE_GB=$(jq -r '.cache_size_gb // 4' "${OPTIONS_PATH}")
+LOG_LEVEL=$(jq -r '.log_level // "info"' "${OPTIONS_PATH}")
 
-bashio::log.info "Starting stremio-server"
-bashio::log.info "  cache size:  ${CACHE_SIZE_GB} GB"
-bashio::log.info "  log level:   ${LOG_LEVEL}"
-bashio::log.info "  cache dir:   /share/stremio-server-cache"
-bashio::log.info "  listen port: 11470 (mapped by HA Supervisor)"
+echo "[INFO] Starting stremio-server"
+echo "[INFO]   cache size:  ${CACHE_SIZE_GB} GB"
+echo "[INFO]   log level:   ${LOG_LEVEL}"
+echo "[INFO]   cache dir:   /share/stremio-server-cache"
+echo "[INFO]   listen port: 11470 (mapped by HA Supervisor)"
 
 # Environment variables stremio-server respects
 export APP_PATH=/share/stremio-server-cache

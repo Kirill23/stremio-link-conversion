@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.4 — 2026-05-19
+
+- Fix `s6-envdir: fatal: unable to envdir /run/s6/container_environment`
+  on startup. The previous run.sh used `#!/usr/bin/with-contenv bashio`,
+  which requires s6-overlay's init to populate that directory. Our
+  config.yaml sets `init: false`, so s6 never runs and the path
+  doesn't exist. Rewrite run.sh to use plain bash + `jq` reading
+  `/data/options.json` directly; add `bash` and `jq` to the apk
+  install in the Dockerfile.
+
 ## 1.0.3 — 2026-05-19
 
 - **Pre-built multi-arch images on GHCR.** CI now publishes
