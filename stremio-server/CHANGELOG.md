@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.2 — 2026-05-19
+
+- Fix Dockerfile `COPY --from=upstream` path. The server bundle in
+  `stremio/server:latest` lives at `/stremio/server.js`, not
+  `/srv/server.js` (verified by inspecting the upstream image:
+  WORKDIR is `/stremio`, entrypoint is `node server.js`). The 1.0.1
+  build progressed past the ARG fix but failed at the COPY step with
+  `"/srv/server.js": not found`. Update the path; bundle is a
+  self-contained 6.6MB webpack output so no other files are needed.
+
 ## 1.0.1 — 2026-05-19
 
 - Fix Dockerfile multi-stage `ARG BUILD_FROM` placement. Docker

@@ -26,10 +26,15 @@ FROM ${BUILD_FROM}
 # Node.js subprocess if it crashes mid-stream.
 RUN apk add --no-cache nodejs tini
 
-# Copy the Stremio server bundle from the upstream image. The path inside
-# stremio/server has historically been /srv/server.js; verify if a future
-# upstream tag moves it.
-COPY --from=upstream /srv/server.js /opt/stremio-server/server.js
+# Copy the Stremio server bundle from the upstream image. As of
+# stremio/server:latest (2026-05-19), the bundle lives at
+# /stremio/server.js (the upstream image's WORKDIR is /stremio,
+# entrypoint is `node server.js`). The bundle is a self-contained
+# ~6.6MB webpack output — no node_modules needed at runtime.
+# Note: upstream runs Node 14; we run Node 20 on the HA base. Webpack
+# bundles are usually portable across major Node versions but if you
+# hit runtime errors, this is the first place to look.
+COPY --from=upstream /stremio/server.js /opt/stremio-server/server.js
 
 # Cache and config dirs (mapped to /share by config.yaml's map: share:rw)
 RUN mkdir -p /share/stremio-server-cache
