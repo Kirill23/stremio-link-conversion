@@ -43,13 +43,11 @@ jobs:
         with:
           # --<arch>: target architecture
           # --target: relative path to the add-on directory
-          # --image: registry image name; {arch} is substituted by the action.
-          #          Version is read from stremio-server/config.yaml; the
-          #          action tags both `{version}` and `latest`.
-          # --test (PRs only): build but don't push, to keep PR runs free
-          #          of registry side-effects.
+          # The image name comes from stremio-server/build.yaml's `image:`
+          # field (the canonical HA add-on convention). Passing --image
+          # on the command line double-prefixes the registry.
+          # --test (PRs only): build without pushing.
           args: |
             --${{ matrix.arch }} \
             --target stremio-server \
-            --image "ghcr.io/kirill23/{arch}-addon-stremio-server" \
             ${{ github.event_name == 'pull_request' && '--test' || '' }}
