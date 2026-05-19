@@ -22,11 +22,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      # NOTE: home-assistant/builder runs inside a container that ships
+      # its own QEMU + buildx. Setting up an outer buildx via
+      # docker/setup-buildx-action causes the build to use the buildkit
+      # backend (which stores images in the buildx cache, not the local
+      # docker daemon), and the action's subsequent `docker tag` step
+      # then fails with "No such image". Skip the outer setup.
 
       - name: Log in to GitHub Container Registry
         # Skip login on PRs from forks (no secret access). Pushes from
