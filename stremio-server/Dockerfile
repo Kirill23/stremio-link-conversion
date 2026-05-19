@@ -8,10 +8,18 @@
 # inherit Stremio's release cadence without writing our own download
 # scripts. The downside is a build-time dependency on Docker Hub; pin
 # to a specific tag once one is chosen for v1.
+#
+# BUILD_FROM must be declared as a global ARG (before any FROM line) so
+# that subsequent FROM stages can reference it. Declaring it inline
+# between stages does not work with BuildKit — Docker treats the second
+# FROM as a new build context that doesn't see ARGs from the previous
+# stage. The HA Supervisor passes BUILD_FROM as a --build-arg keyed off
+# the target architecture (see build.yaml).
+
+ARG BUILD_FROM
 
 FROM stremio/server:latest AS upstream
 
-ARG BUILD_FROM
 FROM ${BUILD_FROM}
 
 # Node.js is needed at runtime; tini reaps zombie processes from the
