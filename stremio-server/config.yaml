@@ -1,6 +1,12 @@
 name: Stremio Server
-version: "1.0.2"
+version: "1.0.3"
 slug: stremio-server
+# Pre-built multi-arch images published by .github/workflows/build.yml
+# on push to master (and on tag pushes). Supervisor pulls the image
+# tagged with the version above instead of cloning this repo and
+# building locally — first install on a Pi drops from 5-10 min to ~30s.
+# {arch} is substituted with the host's architecture (aarch64, amd64, armv7).
+image: ghcr.io/kirill23/{arch}-addon-stremio-server
 description: >
   Runs the official stremio-server Node.js application — the same component
   Stremio's desktop app uses internally — so the hacs-stremio HACS integration

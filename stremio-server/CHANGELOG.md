@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.3 — 2026-05-19
+
+- **Pre-built multi-arch images on GHCR.** CI now publishes
+  `ghcr.io/kirill23/{arch}-addon-stremio-server:<version>` for aarch64,
+  amd64, and armv7 on every master push. Supervisor pulls the image
+  instead of building locally on the user's device — first install
+  drops from 5-10 minutes (local build on Pi) to ~30 seconds (image
+  pull). The `image:` field in config.yaml directs Supervisor to use
+  the pre-built image; the Dockerfile is now only used by CI.
+
 ## 1.0.2 — 2026-05-19
 
 - Fix Dockerfile `COPY --from=upstream` path. The server bundle in
